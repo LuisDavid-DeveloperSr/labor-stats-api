@@ -1,8 +1,8 @@
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export async function getUnemployment(country, year) {
   const res = await fetch(
-    `${BASE_URL}/unemployment?country=${country}&year=${year}`
+    `${BASE_URL}/api/unemployment?country=${country}&year=${year}`
   );
 
   if (!res.ok) {
@@ -14,7 +14,7 @@ export async function getUnemployment(country, year) {
 
 export async function getTimeSeries(country) {
   const res = await fetch(
-    `${BASE_URL}/timeseries?country=${country}`
+    `${BASE_URL}/api/timeseries?country=${country}`
   );
 
   if (!res.ok) {
