@@ -1,7 +1,8 @@
 import express from "express";
 import {
   getUnemployment,
-  getTimeSeries
+  getTimeSeries,
+  getCountries
 } from "../controllers/labor.controller.js";
 
 const router = express.Router();
@@ -17,6 +18,9 @@ router.get("/unemployment", getUnemployment);
 // GET /api/timeseries?country=ES
 // labor.routes.js
 router.get("/timeseries", getTimeSeries);
+
+// GET /api/countries
+router.get("/countries", getCountries);
 
 
 export default router;
