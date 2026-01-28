@@ -14,8 +14,7 @@ export default function TimeSeriesChart({ data }) {
 
       <ResponsiveContainer width="100%" height={350}>
         <LineChart data={data}>
-          <XAxis dataKey="periodo" />
-          <YAxis />
+          <YAxis tickFormatter={(v) => `${v}%`} />
           <Tooltip />
           <Line
             type="monotone"

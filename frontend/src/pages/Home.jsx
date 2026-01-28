@@ -16,17 +16,32 @@ export default function Home() {
       setResult(null);
       setChartData([]);
 
-      // 1️⃣ Dato puntual (año concreto)
+      // 1️⃣ Dato puntual
       const unemployment = await getUnemployment(country, year);
       setResult(unemployment);
 
-      // 2️⃣ Serie temporal completa
+      // 2️⃣ Serie temporal
       const series = await getTimeSeries(country);
+
+      // 🔍 DEBUG CLAVE (míralo en consola del navegador)
+      console.log("SERIES RAW:", series);
+
+      // 🛡️ VALIDACIÓN ROBUSTA
+      if (
+        !series ||
+        !series.value ||
+        !series.dimension ||
+        !series.dimension.time ||
+        !series.dimension.time.category ||
+        !series.dimension.time.category.index
+      ) {
+        throw new Error("Formato inesperado de datos de series temporales");
+      }
 
       const values = series.value;
       const timeIndex = series.dimension.time.category.index;
 
-      // 🔑 CONVERSIÓN CORRECTA DE EUROSTAT → GRÁFICA
+      // 🔑 Conversión segura
       const formattedData = Object.entries(timeIndex)
         .map(([periodo, index]) => ({
           periodo,
@@ -34,12 +49,14 @@ export default function Home() {
         }))
         .filter(item => item.tasa !== undefined);
 
-      console.log("Datos para la gráfica:", formattedData);
+      if (formattedData.length === 0) {
+        throw new Error("Serie temporal vacía");
+      }
 
       setChartData(formattedData);
 
     } catch (err) {
-      console.error(err);
+      console.error("ERROR EN BÚSQUEDA:", err);
       setError("No se pudieron obtener los datos.");
     }
   };
